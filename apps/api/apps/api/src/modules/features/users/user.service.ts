@@ -1,40 +1,53 @@
 // apps/api/src/modules/user/user.service.ts
 import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateUserDto } from './user.dto';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'apps/api/src/modules/features/users/user.entity';
-import { UserRole } from 'apps/api/src/modules/features/users/user.enum';
+import { EmailVerificationService } from 'apps/api/src/modules/features/email-verification/email-verification.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-  ) {}
+    private readonly emailVerificationService: EmailVerificationService,
+    private readonly dataSource: DataSource, // inject DataSource for transactions
+  ) { }
 
   async signUp(createUserDto: CreateUserDto): Promise<User> {
-    const { email, username, password } = createUserDto;
+    return this.dataSource.transaction(async (transactionManager) => {
 
-    // Check if user already exists
-    const existingUser = await this.userRepository.findOne({ where: [{ email }, { username }] });
-    if (existingUser) {
-      throw new ConflictException('User with this email or username already exists');
-    }
+      const { email, username, password } = createUserDto;
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+      // Check if user already exists
+      const existingUser = await transactionManager.findOne(User, {
+        where: [{ email }, { username }],
+      });
+      if (existingUser) {
+        throw new ConflictException('User with this email or username already exists');
+      }
 
-    // Create new user
-    const user = this.userRepository.create({
-      email,
-      username,
-      password: hashedPassword,
-      isActive: true,
-      role: UserRole.USER,
-    });
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      // Create user
+      const user = transactionManager.create(User, {
+        email,
+        username,
+        password: hashedPassword,
+        isActive: false, // inactive until verified
+      });
 
-    return this.userRepository.save(user);
+      await transactionManager.save(User, user);
+
+      // Create email verification token
+     const emailVerification = await this.emailVerificationService.generateToken(user, transactionManager);
+
+      // Send email (can fail, but won't rollback user creation)
+      await this.emailVerificationService.enqueueEmailVerification(user.email, emailVerification.token)
+      
+      return user;
+    })
   }
 
 

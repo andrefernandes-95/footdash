@@ -7,15 +7,15 @@ import {
   Stack,
   Button,
   Card,
-  CardContent,
   Chip,
-  useTheme,
 } from '@mui/material';
 
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import GroupIcon from '@mui/icons-material/Group';
 import StarIcon from '@mui/icons-material/Star';
+import Link from 'next/link';
+import { AppRoutes } from '@/app/data/routes';
 
 const features = [
   {
@@ -68,7 +68,7 @@ export default function LandingPage() {
         <Container maxWidth="lg">
           <Stack spacing={4} alignItems="center" textAlign="center">
             <Chip
-              label="Introducing the United FC Platform"
+              label="Introducing the Footdash Platform"
               sx={{
                 bgcolor: 'rgba(255,255,255,0.25)',
                 backdropFilter: 'blur(5px)',
@@ -96,9 +96,12 @@ export default function LandingPage() {
               Manage players, games, merchandise, and fans — all from one powerful platform for modern clubs.
             </Typography>
 
+            
             <Button
               variant="contained"
               size="large"
+              LinkComponent={Link}
+              href={AppRoutes.CREATE_ACCOUNT}
               sx={{
                 px: 7,
                 py: 1.8,
@@ -123,9 +126,8 @@ export default function LandingPage() {
                 },
               }}
             >
-              CREATE YOUR TEAM
+              Start For Free
             </Button>
-
           </Stack>
         </Container>
       </Box>
@@ -234,7 +236,7 @@ export default function LandingPage() {
       {/* FOOTER */}
       <Box sx={{ py: 5, textAlign: 'center', bgcolor: '#f6f7fb' }}>
         <Typography variant="body2" color="text.secondary">
-          © {new Date().getFullYear()} United FC Platform — All rights reserved.
+          © {new Date().getFullYear()} Footdash Platform — All rights reserved.
         </Typography>
       </Box>
     </Box>

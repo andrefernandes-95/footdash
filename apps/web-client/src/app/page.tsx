@@ -1,7 +1,10 @@
 import Hero from '@/app/components/hero/hero';
 import { Box } from '@mui/material';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
+    redirect('/landing');
+
   return (
     <>
       <Box

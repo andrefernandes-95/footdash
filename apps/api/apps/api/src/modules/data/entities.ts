@@ -4,6 +4,7 @@ import { TeamMember } from 'apps/api/src/modules/features/teams/team-member.enti
 import { Subscription } from 'apps/api/src/modules/features/subscriptions/subscription.entity';
 import { SubscriptionPlan } from 'apps/api/src/modules/features/subscription-plans/subscription-plan.entity';
 import { UserProfile } from 'apps/api/src/modules/features/users/user-profile.entity';
+import { EmailVerification } from 'apps/api/src/modules/features/email-verification/email-verification.entity';
 
 export const ALL_ENTITIES: never[] = [
     User,
@@ -11,5 +12,6 @@ export const ALL_ENTITIES: never[] = [
     Team,
     TeamMember,
     Subscription,
-    SubscriptionPlan
+    SubscriptionPlan,
+    EmailVerification,
 ] as never[]

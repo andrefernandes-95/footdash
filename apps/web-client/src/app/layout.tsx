@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "United FC",
+  title: "Footdash",
   description: "Together in the beautiful game",
 };
 

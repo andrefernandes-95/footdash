@@ -1,10 +1,10 @@
-import DashboardPage from "@/app/components/dashboard-page/dashboard-page";
+import UserDashboardLayout from "@/app/components/user-dashboard-layout/user-dashboard-layout";
 import TeamsPage from "@/app/user/manage-teams";
 
 export default function UserPage() {
   return (
-    <DashboardPage>
+    <UserDashboardLayout>
       <TeamsPage />
-    </DashboardPage>
+    </UserDashboardLayout>
   );
 }

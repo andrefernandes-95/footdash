@@ -1,10 +1,9 @@
 "use client";
 
-import { Box, Stack, TextField, Button, Typography, Avatar, IconButton, Tooltip } from "@mui/material";
+import { Box, Stack, TextField, Button, Typography, Avatar } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useState } from "react";
-import DashboardPage from "@/app/components/dashboard-page/dashboard-page";
+import UserDashboardLayout from "@/app/components/user-dashboard-layout/user-dashboard-layout";
 
 interface ProfileFormValues {
   first_name: string;
@@ -30,7 +29,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <DashboardPage>
+    <UserDashboardLayout>
     <Box
       sx={{
         width: "100%",
@@ -212,6 +211,6 @@ export default function EditProfilePage() {
         </form>
       </Box>
     </Box>
-    </DashboardPage>
+    </UserDashboardLayout>
   );
 }

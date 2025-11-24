@@ -63,7 +63,7 @@ export default function Hero({ imageUrl }: HeroProps) {
               fontSize: { xs: '3rem', md: '4.5rem' },
             }}
           >
-            United FC
+            Footdash
           </Typography>
           <Typography
             variant="h5"

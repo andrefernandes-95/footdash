@@ -31,6 +31,17 @@ services:
     volumes:
       - redis_data:/data
 
+  maildev:
+    image: maildev/maildev:latest
+    container_name: united-fc-maildev
+    restart: always
+    ports:
+      - "1081:1081"  # Web UI
+      - "1026:1026"  # SMTP server
+    environment:
+      - MAILDEV_SMTP_PORT=1026
+      - MAILDEV_WEB_PORT=1081
+
 volumes:
   postgres_data:
   redis_data:

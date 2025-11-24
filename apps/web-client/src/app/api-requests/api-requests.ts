@@ -1,12 +1,19 @@
+import { AppConfig } from "@/app/data/config";
 import axios from "axios";
-
-const apiPath = `http://localhost:3005`
 
 const login = (
     email: string,
     password: string,
-) => axios.post(apiPath + '/auth/login', { email, password }, { withCredentials: true });
+) => axios.post(AppConfig.API_URL + '/auth/login', { email, password }, { withCredentials: true });
+
+
+const signUp = ({email, username, password }: {
+    email: string,
+    username: string,
+    password: string,
+}) => axios.post(AppConfig.API_URL + '/user/signup', { email, username, password }, { withCredentials: true });
 
 export const ApiRequests = {
     login,
+    signUp,
 }

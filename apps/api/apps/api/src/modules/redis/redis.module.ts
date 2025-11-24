@@ -2,6 +2,11 @@
 import { Module, Global } from '@nestjs/common';
 import Redis from 'ioredis';
 
+export const RedisConfig = {
+  host: process.env.REDIS_HOST || 'localhost',
+  port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+}
+
 @Global()
 @Module({
   providers: [
@@ -9,8 +14,8 @@ import Redis from 'ioredis';
       provide: 'REDIS_CLIENT',
       useFactory: () => {
         return new Redis({
-          host: process.env.REDIS_HOST || 'localhost',
-          port: parseInt(process.env.REDIS_PORT, 10) || 6379,
+          host: RedisConfig.host,
+          port: RedisConfig.port,
         });
       },
     },

@@ -4,9 +4,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
+import { EmailVerificationModule } from 'apps/api/src/modules/features/email-verification/email-verification.module';
 
 @Module({
   imports: [
+    EmailVerificationModule,
     TypeOrmModule.forFeature([User]),
   ],
   providers: [UserService],
