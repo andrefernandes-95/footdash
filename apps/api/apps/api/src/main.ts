@@ -1,13 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
+import { getClientUri } from 'apps/api/src/modules/data/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.use(cookieParser());
+
   app.enableCors({
-    origin: ['http://localhost:3002'],
+    origin: [getClientUri()],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

@@ -10,6 +10,6 @@ import { RedisModule } from 'apps/api/src/modules/redis/redis.module';
   imports: [RedisModule, UserModule],
   providers: [AuthService, SessionService],
   controllers: [AuthController],
-  exports: [AuthService],
+  exports: [AuthService, SessionService],
 })
 export class AuthModule {}

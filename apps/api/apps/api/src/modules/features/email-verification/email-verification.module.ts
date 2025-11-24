@@ -4,6 +4,7 @@ import { EmailVerification } from './email-verification.entity';
 import { EmailVerificationService } from './email-verification.service';
 import { MailModule } from 'apps/api/src/modules/mail/mail.module';
 import { EmailQueueModule } from 'apps/api/src/modules/email-queue/email-queue.module';
+import { EmailVerificationController } from 'apps/api/src/modules/features/email-verification/email-verification.controller';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { EmailQueueModule } from 'apps/api/src/modules/email-queue/email-queue.m
     EmailQueueModule,
     MailModule,
   ],
+  controllers: [EmailVerificationController],
   providers: [EmailVerificationService],
   exports: [EmailVerificationService],
 })

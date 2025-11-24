@@ -128,6 +128,38 @@ export default function LandingPage() {
             >
               Start For Free
             </Button>
+
+            <Button
+              variant="outlined"
+              size="large"
+              LinkComponent={Link}
+              href={AppRoutes.LOGIN}
+              sx={{
+                px: 7,
+                py: 1.8,
+                borderRadius: 6,
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(2px)',
+                color: MAIN_COLOR,
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                fontSize: '1.15rem',
+                boxShadow: '0 6px 15px rgba(25, 119, 155, 0.3)',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                cursor: 'pointer',
+                '&:hover': {
+                  background: 'rgba(255, 255, 255, 1)',
+                  boxShadow: '0 10px 25px rgba(25, 119, 155, 0.45)',
+                  transform: 'scale(1.05)',
+                },
+                '&:active': {
+                  transform: 'scale(0.98)',
+                  boxShadow: '0 5px 12px rgba(25, 119, 155, 0.35)',
+                },
+              }}
+            >
+              Login
+            </Button>
           </Stack>
         </Container>
       </Box>

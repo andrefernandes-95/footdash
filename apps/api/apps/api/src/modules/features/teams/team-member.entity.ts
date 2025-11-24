@@ -38,4 +38,8 @@ export class TeamMember {
     default: TeamMembershipStatus.PENDING,
   })
   status: TeamMembershipStatus;
+
+  @Column({ name: 'can_access_backoffice' })
+  canAccessBackoffice: boolean;
+
 }

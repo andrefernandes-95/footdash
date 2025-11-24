@@ -1,9 +1,10 @@
 // apps/api/src/modules/auth/auth.controller.ts
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { ApiTags, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LoginDto } from 'apps/api/src/modules/features/auth/auth.dto';
+import { SessionGuard } from 'apps/api/src/modules/features/auth/session.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,6 +42,7 @@ export class AuthController {
     return { message: 'Logged out' };
   }
 
+  @UseGuards(SessionGuard)
   @Get('me')
   @ApiOperation({ summary: 'Get currently logged-in user' })
   @ApiResponse({
@@ -49,7 +51,7 @@ export class AuthController {
     schema: { example: { user: { id: 1, email: 'user@example.com', username: 'user1' } } },
   })
   async me(@Req() req: Request) {
-    const sessionId = req.cookies['SESSIONID'];
+    const sessionId = req.cookies?.['SESSIONID'];
     if (!sessionId) return { user: null };
 
     const userId = await this.authService.getUserIdFromSession(sessionId);

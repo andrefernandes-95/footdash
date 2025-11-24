@@ -20,4 +20,9 @@ export class SessionService {
   async deleteSession(sessionId: string) {
     await this.redisClient.del(`session:${sessionId}`);
   }
+
+  async refreshSessionTTL(sessionId: string) {
+    // Set TTL to 1 hour
+    await this.redisClient.expire(`session:${sessionId}`, 3600);
+  }
 }

@@ -10,9 +10,8 @@ export class EmailVerification {
   @Column()
   token: string; // a unique token for verification
 
-  @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @Column({ name: 'user_id' })
+  userId: number;
 
   @Column({ default: false })
   verified: boolean;

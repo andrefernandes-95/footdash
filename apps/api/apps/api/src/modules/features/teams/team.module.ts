@@ -5,10 +5,12 @@ import { Team } from './team.entity';
 import { TeamMember } from './team-member.entity';
 import { TeamsService } from 'apps/api/src/modules/features/teams/team.service';
 import { TeamController } from 'apps/api/src/modules/features/teams/team.controller';
+import { AuthModule } from 'apps/api/src/modules/features/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Team, TeamMember]),
+    AuthModule,
   ],
   providers: [TeamsService],
   controllers: [TeamController],

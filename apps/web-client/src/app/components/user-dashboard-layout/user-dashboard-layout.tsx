@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Tooltip,
 } from '@mui/material';
 
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -20,13 +21,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import PageBackdrop from '@/app/components/page-backdrop/page-backdrop';
 
-export default function UserDashboardLayout({ children }: { children: React.ReactNode }) {
+export default function UserDashboardLayout({ children, user }: { children: React.ReactNode, user: any }) {
   const pathname = usePathname();
 
   const menuItems = [
-    { label: 'Overview', icon: <DashboardIcon />, path: '/dashboard' },
-    { label: 'Your Teams', icon: <GroupsIcon />, path: '/dashboard/teams' },
-    { label: 'Account Settings', icon: <SettingsIcon />, path: '/dashboard/settings' },
+    { label: 'Overview', icon: <DashboardIcon />, path: '/user' },
+    { label: 'Account Settings', icon: <SettingsIcon />, path: '/user/edit-profile' },
     { label: 'Logout', icon: <LogoutIcon />, path: '/logout' },
   ];
 
@@ -70,9 +70,21 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
               <Typography sx={{ fontSize: '1rem', opacity: 0.8 }}>
                 Welcome
               </Typography>
-              <Typography sx={{ fontWeight: 700, fontSize: '1.2rem' }}>
-                John Doe
-              </Typography>
+              <Tooltip title={user?.username || ''}>
+                <Typography
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: '1.2rem',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '150px', // required for truncation
+                    cursor: 'default',
+                  }}
+                >
+                  {user?.username}
+                </Typography>
+              </Tooltip>
             </Box>
           </Box>
         </Box>
@@ -119,7 +131,19 @@ export default function UserDashboardLayout({ children }: { children: React.Reac
           p: 5,
         }}
       >
-        {children}
+        <Box
+          sx={{
+            width: "100%",
+            minHeight: "100vh",
+            p: 6,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-start",
+            position: "relative",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );

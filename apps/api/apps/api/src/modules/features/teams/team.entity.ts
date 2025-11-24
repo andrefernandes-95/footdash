@@ -1,4 +1,5 @@
 import { TeamMember } from 'apps/api/src/modules/features/teams/team-member.entity';
+import { User } from 'apps/api/src/modules/features/users/user.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('teams')
@@ -15,6 +16,12 @@ export class Team {
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
+  @Column({ name: 'created_by' })
+  createdBy: number;
+
   @OneToMany(() => TeamMember, (teamMember) => teamMember.user)
   members: TeamMember[];
+
+  @Column({ name: 'color' })
+  color: string;
 }

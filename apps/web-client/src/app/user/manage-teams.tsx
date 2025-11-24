@@ -1,5 +1,7 @@
 'use client';
 
+import { useGetMyTeams } from '@/app/hooks/useGetMyTeams';
+import { User } from '@/app/types/models';
 import {
   Box,
   Typography,
@@ -32,7 +34,16 @@ const sampleTeams = [
   },
 ];
 
-export default function TeamsPage() {
+interface Props {
+  user: User | null;
+}
+
+export default function TeamsPage({ user }: Props) {
+
+  const { teams, loading } = useGetMyTeams()
+
+
+
   return (
     <Box sx={{ width: '100%' }}>
       {/* HEADER */}
@@ -102,11 +113,12 @@ export default function TeamsPage() {
         </Grid>
 
         {/* EXISTING TEAMS */}
-        {sampleTeams.map((team) => (
+        {(teams ?? []).map((team) => (
           <Grid item xs={12} sm={6} md={4} key={team.id}>
             <Card
               sx={{
                 height: 180,
+                width: 180,
                 borderRadius: 4,
                 position: 'relative',
                 overflow: 'hidden',
@@ -134,7 +146,7 @@ export default function TeamsPage() {
                   </Typography>
 
                   <Chip
-                    label={team.role}
+                    label={team.members?.find(x => x.id === user?.id)?.teamRole}
                     sx={{
                       background: 'rgba(0,0,0,0.4)',
                       color: 'white',

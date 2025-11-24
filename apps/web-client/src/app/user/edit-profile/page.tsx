@@ -4,6 +4,7 @@ import { Box, Stack, TextField, Button, Typography, Avatar } from "@mui/material
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
 import UserDashboardLayout from "@/app/components/user-dashboard-layout/user-dashboard-layout";
+import { useAuth } from "@/app/hooks/useAuth";
 
 interface ProfileFormValues {
   first_name: string;
@@ -16,6 +17,8 @@ export default function EditProfilePage() {
   const { control, handleSubmit } = useForm<ProfileFormValues>();
   const [avatar, setAvatar] = useState<string | null>(null);
 
+    const { user } = useAuth()
+  
   const onSubmit = (data: ProfileFormValues) => {
     console.log("Profile updated:", data);
   };
@@ -29,18 +32,7 @@ export default function EditProfilePage() {
   };
 
   return (
-    <UserDashboardLayout>
-    <Box
-      sx={{
-        width: "100%",
-        minHeight: "100vh",
-        p: 6,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        position: "relative",
-      }}
-    >
+    <UserDashboardLayout user={user}>
       {/* Glass Panel */}
       <Box
         sx={{
@@ -209,7 +201,6 @@ export default function EditProfilePage() {
             </Button>
           </Stack>
         </form>
-      </Box>
     </Box>
     </UserDashboardLayout>
   );
