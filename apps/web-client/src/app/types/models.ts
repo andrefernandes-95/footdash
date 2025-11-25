@@ -16,6 +16,7 @@ export interface Team {
 
 export interface TeamMember {
     id: number;
+    userId: number;
 
     team: Team;
 

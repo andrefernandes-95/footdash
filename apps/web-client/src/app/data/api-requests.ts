@@ -1,4 +1,5 @@
 import { AppConfig } from "@/app/data/config";
+import { Team } from "@/app/types/models";
 import axios from "axios";
 
 const signUp = ({ email, username, password }: {
@@ -19,6 +20,7 @@ const verifyEmail = (token: string) =>
 
 const me = () =>  axios.get(AppConfig.API_URL + '/auth/me', { withCredentials: true });
 
+
 const logout = () => axios.post(AppConfig.API_URL + '/auth/logout', {}, { withCredentials: true });
 
 const createTeam = (data: { name: string; slug?: string }) =>
@@ -26,12 +28,18 @@ const createTeam = (data: { name: string; slug?: string }) =>
 
 const myTeams = () =>  axios.get(AppConfig.API_URL + '/team/my-teams', { withCredentials: true });
 
+const getTeamBySlug = (slug: string) => axios.get<Team>(`/api/team/${slug}`, { withCredentials : false });
+
+const meTeam = (teamSlug: string) =>  axios.get(`/api/auth/me-team/${teamSlug}`, { withCredentials: true });
+
 export const ApiRequests = {
     login,
     logout,
     signUp,
     verifyEmail,
     me,
+    meTeam,
     createTeam,
-    myTeams
+    myTeams,
+    getTeamBySlug,
 }

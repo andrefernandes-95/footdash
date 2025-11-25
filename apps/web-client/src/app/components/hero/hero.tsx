@@ -1,16 +1,20 @@
 'use client';
 
+import { Team } from '@/app/types/models';
 import { Box, Typography } from '@mui/material';
 
 interface HeroProps {
   imageUrl: string;
+  team: Team;
 }
 
-export default function Hero({ imageUrl }: HeroProps) {
+export default function Hero({ imageUrl, team }: HeroProps) {
   return (
     <Box
       component="section"
       sx={{
+        display: 'flex',
+        alignItems: 'center',
         position: 'relative',
         width: '100%',
         minHeight: '100vh',
@@ -58,12 +62,12 @@ export default function Hero({ imageUrl }: HeroProps) {
             component="h1"
             sx={{
               fontWeight: 'bold',
-              color: 'primary.main',
+              color: team.color,
               mb: 2,
               fontSize: { xs: '3rem', md: '4.5rem' },
             }}
           >
-            Footdash
+            {team.name}
           </Typography>
           <Typography
             variant="h5"

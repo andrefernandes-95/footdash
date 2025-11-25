@@ -4,7 +4,13 @@ import {
     Box,
 } from '@mui/material';
 
-export default function PageBackdrop() {
+interface Props {
+    backgroundImage?: string;
+    opacity?: number;
+    filter?: string;
+}
+
+export default function PageBackdrop({ filter = 'none', backgroundImage = 'landing.jpg', opacity = 0.25}: Props) {
     return (
         <>
             {/* BACKGROUND + PARTICLES */}
@@ -19,10 +25,11 @@ export default function PageBackdrop() {
                         position: 'absolute',
                         width: '100%',
                         height: '100%',
-                        backgroundImage: 'url("/landing.jpg")',
+                        backgroundImage: `url("/${backgroundImage}")`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        opacity: 0.25,
+                        filter,
+                        opacity,
                     },
                 }
                 }

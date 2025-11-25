@@ -1,5 +1,5 @@
 // teams/teams.controller.ts
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CurrentUser } from 'apps/api/src/modules/features/auth/current-user.decorator';
 import { SessionGuard } from 'apps/api/src/modules/features/auth/session.guard';
@@ -14,7 +14,7 @@ export class TeamController {
     private readonly teamsService: TeamsService
   ) { }
 
-
+  
   @UseGuards(SessionGuard)
   @Get('my-teams')
   @ApiOperation({ summary: 'Get teams created by the logged-in user' })
@@ -31,7 +31,23 @@ export class TeamController {
   async getMyTeams(@CurrentUser() userId: number): Promise<Team[]> {
     return this.teamsService.getTeamsCreatedByUser(userId);
   }
-
+  @Get(':slug')
+  @ApiOperation({ summary: 'Get a team by its slug (public)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Team data',
+    schema: {
+      example: {
+        id: 10,
+        name: 'My Team',
+        slug: 'my-team',
+        createdBy: 1,
+      },
+    },
+  })
+  async getTeamBySlug(@Param('slug') slug: string): Promise<Team> {
+    return this.teamsService.getTeamBySlug(slug);
+  }
 
   @UseGuards(SessionGuard)
   @Post()

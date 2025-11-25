@@ -17,6 +17,21 @@ export class TeamsService {
             relations: ['members'], // optional, if you want to include members
         });
     }
+
+    async getTeamBySlug(slug: string): Promise<Team> {
+        const teamRepo = this.dataSource.getRepository(Team);
+
+        const team = await teamRepo.findOne({
+            where: { slug: slug.toLowerCase() },
+            relations: ['members'], // optional, if you want member info
+        });
+
+        if (!team) {
+            throw new NotFoundException(`Team with slug "${slug}" not found`);
+        }
+
+        return team;
+    }
     
     async createTeam(
         userId: number,

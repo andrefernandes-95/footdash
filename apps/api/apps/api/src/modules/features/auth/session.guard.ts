@@ -4,6 +4,7 @@ import {
   CanActivate,
   ExecutionContext,
 } from '@nestjs/common';
+import { getClientUri, getDomain } from 'apps/api/src/modules/data/config';
 import { AuthService } from 'apps/api/src/modules/features/auth/auth.service';
 import { SessionService } from 'apps/api/src/modules/features/auth/session.service';
 import { Request, Response } from 'express';
@@ -24,11 +25,14 @@ export class SessionGuard implements CanActivate {
       return false; // no session, not authenticated
     }
 
+
     // Get userId from Redis/session store
     const userId = await this.authService.getUserIdFromSession(sessionId);
     if (!userId) {
       return false; // invalid session
     }
+
+    const domain = `.${getDomain()}`
 
     // ✅ Sliding expiration: refresh cookie and backend session
     res.cookie('SESSIONID', sessionId, {
@@ -36,6 +40,7 @@ export class SessionGuard implements CanActivate {
       maxAge: 3600 * 1000, // 1 hour
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain,
     });
 
     await this.sessionService.refreshSessionTTL(sessionId); // reset TTL in Redis

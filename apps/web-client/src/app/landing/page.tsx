@@ -16,6 +16,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import StarIcon from '@mui/icons-material/Star';
 import Link from 'next/link';
 import { AppRoutes } from '@/app/data/routes';
+import { useGetTeamBySlug } from '@/app/hooks/useGetTeamBySlug';
 
 const features = [
   {

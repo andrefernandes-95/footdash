@@ -19,7 +19,7 @@ export class Team {
   @Column({ name: 'created_by' })
   createdBy: number;
 
-  @OneToMany(() => TeamMember, (teamMember) => teamMember.user)
+  @OneToMany(() => TeamMember, (teamMember) => teamMember.team)
   members: TeamMember[];
 
   @Column({ name: 'color' })

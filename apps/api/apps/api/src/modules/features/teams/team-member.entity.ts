@@ -20,9 +20,12 @@ export class TeamMember {
   @JoinColumn({ name: 'team_id' })
   team: Team;
 
-  @ManyToOne(() => User, (user) => user.teamMembers, { onDelete: 'CASCADE' })
+ @ManyToOne(() => User, (user) => user.teamMembers, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @Column({ name: 'user_id' })
+  userId: number;
 
   @Column({
     name: 'team_role',

@@ -11,7 +11,26 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: [getClientUri()],
+    origin: (origin, callback) => {
+      const clientUri = getClientUri(); // e.g., "localhost:3000" or "myapp.com"
+      console.log('clientUri', clientUri)
+      
+      // allow same origin
+      if (!origin || origin === clientUri) {
+        return callback(null, true);
+      }
+
+      // allow subdomains
+      const regex = new RegExp(`^https?:\/\/[a-z0-9-]+\\.${clientUri.replace(/https?:\/\//, '')}$`);
+      if (regex.test(origin)) {
+        console.log('miau')
+        return callback(null, true);
+      }
+        console.log('false')
+
+      // disallow others
+      callback(new Error(`CORS not allowed for ${origin}`));
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

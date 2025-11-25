@@ -1,5 +1,7 @@
 'use client';
 
+import { AppConfig } from '@/app/data/config';
+import { AppRoutes } from '@/app/data/routes';
 import { useGetMyTeams } from '@/app/hooks/useGetMyTeams';
 import { User } from '@/app/types/models';
 import {
@@ -106,7 +108,7 @@ export default function TeamsPage({ user }: Props) {
                   color: 'white',
                 }}
               >
-                + Create New Team
+                + Create Team
               </Typography>
             </CardActionArea>
           </Card>
@@ -134,7 +136,7 @@ export default function TeamsPage({ user }: Props) {
               }}
             >
               <CardActionArea
-                href={`/dashboard/teams/${team.id}`}
+                href={AppRoutes.TEAM_DASHBOARD(team.slug)}
                 sx={{ height: '100%' }}
               >
                 <CardContent>
@@ -146,7 +148,7 @@ export default function TeamsPage({ user }: Props) {
                   </Typography>
 
                   <Chip
-                    label={team.members?.find(x => x.id === user?.id)?.teamRole}
+                    label={team.members?.find(x => x.userId === user?.id)?.teamRole}
                     sx={{
                       background: 'rgba(0,0,0,0.4)',
                       color: 'white',
