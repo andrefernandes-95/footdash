@@ -12,6 +12,8 @@ import { Alert } from '@mui/material';
 import { ApiRequests } from '@/app/data/api-requests';
 import { AppRoutes } from '@/app/data/routes';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { onError } from '@/app/data/error';
 
 type CreateUserForm = {
   email: string;
@@ -23,7 +25,10 @@ type CreateUserForm = {
 const schema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required'),
   username: yup.string().required('Username is required'),
-  password: yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
+  password: yup
+    .string()
+    .min(6, 'Minimum 6 characters')
+    .required('Password is required'),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
@@ -35,38 +40,65 @@ export default function SignupForm() {
     resolver: yupResolver(schema),
   });
   const [networkError, setNetworkError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const onSubmit = async (data: CreateUserForm) => {
     setNetworkError(null);
-    setLoading(true);
-
-    try {
-      const { email, username, password } = data;
-      await ApiRequests.signUp({ email, username, password });
-      router.push(AppRoutes.CREATE_ACCOUNT_SUCCESS)
-    } catch (error: any) {
-      console.error(error);
-      setNetworkError(error?.response?.data?.message || 'Something went wrong. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    signupMutation.mutate(data);
   };
+
+  const signupMutation = useMutation({
+    mutationFn: (data: CreateUserForm) => ApiRequests.signUp(data),
+    onSuccess: async () => {
+      router.push(AppRoutes.CREATE_ACCOUNT_SUCCESS);
+    },
+    onError: (error) => onError(error, (msg) => setNetworkError(msg)),
+  });
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'flex-end' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 16,
+        alignItems: 'flex-end',
+        minWidth: 400,
+      }}
     >
-      {networkError && <Alert severity="error" style={{ width: '100%' }}>{networkError}</Alert>}
+      {networkError && (
+        <Alert severity="error" style={{ width: '100%' }}>
+          {networkError}
+        </Alert>
+      )}
 
-      <EmailInput<CreateUserForm> name="email" control={control} label="Email" />
-      <TextInput<CreateUserForm> name="username" control={control} label="Username" />
-      <PasswordInput<CreateUserForm> name="password" control={control} label="Password" />
-      <PasswordInput<CreateUserForm> name="confirmPassword" control={control} label="Confirm Password" />
+      <EmailInput<CreateUserForm>
+        name="email"
+        control={control}
+        label="Email"
+      />
+      <TextInput<CreateUserForm>
+        name="username"
+        control={control}
+        label="Username"
+      />
+      <PasswordInput<CreateUserForm>
+        name="password"
+        control={control}
+        label="Password"
+      />
+      <PasswordInput<CreateUserForm>
+        name="confirmPassword"
+        control={control}
+        label="Confirm Password"
+      />
 
-      <PrimaryButton label="Create account" fullWidth type="submit" disabled={loading} />
+      <PrimaryButton
+        label="Create account"
+        fullWidth
+        type="submit"
+        disabled={signupMutation.isPending}
+      />
     </form>
   );
 }

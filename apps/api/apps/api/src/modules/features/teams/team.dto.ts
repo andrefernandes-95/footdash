@@ -11,7 +11,6 @@ export class CreateTeamDto {
   @IsNotEmpty()
   slug: string;
 
-
   @ApiProperty({ example: 'green', required: false })
   @IsOptional()
   color: string;

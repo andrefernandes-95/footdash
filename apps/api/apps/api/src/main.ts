@@ -13,14 +13,17 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const clientUri = getClientUri(); // e.g., "localhost:3000" or "myapp.com"
-      
+
       // allow same origin
       if (!origin || origin === clientUri) {
         return callback(null, true);
       }
 
       // allow subdomains
-      const regex = new RegExp(`^https?:\/\/[a-z0-9-]+\\.${clientUri.replace(/https?:\/\//, '')}$`);
+      const regex = new RegExp(
+        `^https?:\/\/[a-z0-9-]+\\.${clientUri.replace(/https?:\/\//, '')}$`,
+      );
+
       if (regex.test(origin)) {
         return callback(null, true);
       }

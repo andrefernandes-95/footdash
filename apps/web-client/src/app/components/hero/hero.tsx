@@ -1,14 +1,13 @@
 'use client';
 
-import { Team } from '@/app/types/models';
+import { AppConfig } from '@/app/data/config';
 import { Box, Typography } from '@mui/material';
 
 interface HeroProps {
   imageUrl: string;
-  team: Team;
 }
 
-export default function Hero({ imageUrl, team }: HeroProps) {
+export default function Hero({ imageUrl }: HeroProps) {
   return (
     <Box
       component="section"
@@ -62,12 +61,12 @@ export default function Hero({ imageUrl, team }: HeroProps) {
             component="h1"
             sx={{
               fontWeight: 'bold',
-              color: team.color,
+              color: AppConfig.TEAM_COLOR,
               mb: 2,
               fontSize: { xs: '3rem', md: '4.5rem' },
             }}
           >
-            {team.name}
+            {AppConfig.TEAM_NAME}
           </Typography>
           <Typography
             variant="h5"

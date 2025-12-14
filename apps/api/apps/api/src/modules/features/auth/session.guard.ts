@@ -1,9 +1,5 @@
 // apps/api/src/modules/auth/guards/session.guard.ts
-import {
-  Injectable,
-  CanActivate,
-  ExecutionContext,
-} from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { getClientUri, getDomain } from 'apps/api/src/modules/data/config';
 import { AuthService } from 'apps/api/src/modules/features/auth/auth.service';
 import { SessionService } from 'apps/api/src/modules/features/auth/session.service';
@@ -19,14 +15,12 @@ export class SessionGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
     const res = context.switchToHttp().getResponse<Response>();
-    console.log('req.cookies:', JSON.stringify(req.cookies))
+
     const sessionId = req.cookies?.['SESSIONID'];
-        console.log('sessionId', sessionId)
 
     if (!sessionId) {
       return false; // no session, not authenticated
     }
-
 
     // Get userId from Redis/session store
     const userId = await this.authService.getUserIdFromSession(sessionId);

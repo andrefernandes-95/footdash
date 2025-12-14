@@ -15,7 +15,7 @@ export function PasswordInput<T extends FieldValues>({
 }: BaseInputProps<T>) {
   const [show, setShow] = useState(false);
 
-  const toggle = () => setShow(prev => !prev);
+  const toggle = () => setShow((prev) => !prev);
 
   return (
     <Controller
@@ -30,14 +30,10 @@ export function PasswordInput<T extends FieldValues>({
           disabled={disabled}
           type={show ? 'text' : 'password'}
           variant="filled"
+          color="primary"
           error={!!fieldState.error}
           helperText={fieldState.error?.message}
-          InputLabelProps={{ sx: { color: 'rgba(255,255,255,0.9)' } }}
           InputProps={{
-            sx: {
-              bgcolor: 'rgba(255,255,255,0.1)',
-              color: 'white',
-            },
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton onClick={toggle} edge="end">

@@ -1,10 +1,9 @@
-
 export const getClientUri = () => {
-    return process.env.CLIENT_URI
-        ? process.env.CLIENT_URI.replace(/\/$/, '')
-        : undefined;
-}
+  return process.env.CLIENT_URI
+    ? process.env.CLIENT_URI.replace(/\/$/, '')
+    : undefined;
+};
 
 export const getDomain = () => {
-    return process.env.CLIENT_DOMAIN ?? ''
-}
+  return process.env.CLIENT_DOMAIN ?? '';
+};

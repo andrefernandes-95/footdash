@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { Button, ButtonProps } from "@mui/material";
-import React from "react";
+import { Button, ButtonProps } from '@mui/material';
+import React from 'react';
 
 export interface Props {
   label: string;
   onClick?: () => void;
-  type?: "button" | "submit" | "reset";
-  variant?: ButtonProps["variant"];
+  type?: 'button' | 'submit' | 'reset';
+  variant?: ButtonProps['variant'];
   disabled?: boolean;
   fullWidth?: boolean;
 }
@@ -15,8 +15,8 @@ export interface Props {
 export default function PrimaryButton({
   label,
   onClick,
-  type = "button",
-  variant = "outlined",
+  type = 'button',
+  variant = 'outlined',
   disabled = false,
   fullWidth = false,
 }: Props) {
@@ -32,13 +32,10 @@ export default function PrimaryButton({
         px: 5,
         py: 1.8,
         borderRadius: 4,
-        color: "#fff",
-        borderColor: "rgba(255,255,255,.25)",
         fontWeight: 900,
-        textTransform: "none",
-        fontSize: "1.1rem",
-        transition: ".2s ease all",
-        "&:hover": { background: "rgba(255,255,255,.25)" },
+        textTransform: 'none',
+        fontSize: '1.1rem',
+        transition: '.2s ease all',
       }}
       onClick={onClick}
     >
