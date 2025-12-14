@@ -11,7 +11,7 @@ const signUp = ({ email, username, password }: {
 const login = ({ email, password }: {
     email: string,
     password: string,
-}) => axios.post(AppConfig.API_URL + '/auth/login', { email, password }, { withCredentials: true });
+}) => axios.post<{ accessToken: string; refreshToken: string; userId: number }>('/api/auth/login', { email, password }, { withCredentials: true });
 
 const verifyEmail = (token: string) =>
     axios.get(AppConfig.API_URL + `/email-verification/verify?token=${token}`, {
@@ -28,9 +28,9 @@ const createTeam = (data: { name: string; slug?: string }) =>
 
 const myTeams = () =>  axios.get(AppConfig.API_URL + '/team/my-teams', { withCredentials: true });
 
-const getTeamBySlug = (slug: string) => axios.get<Team>(`/api/team/${slug}`, { withCredentials : false });
-
-const meTeam = (teamSlug: string) =>  axios.get(`/api/auth/me-team/${teamSlug}`, { withCredentials: true });
+const getTeamBySlug = (slug: string) => axios.get<Team>(`/api/team/${slug}`, { withCredentials : true });
+    
+const meTeam = (slug: string) =>  axios.get(`/api/auth/me-team/${slug}`, { withCredentials: true });
 
 export const ApiRequests = {
     login,

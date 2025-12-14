@@ -14,7 +14,9 @@ export function useGetMyTeams() {
       try {
         const { data } = await ApiRequests.myTeams()
         setTeams(data);
-      } catch {
+      } catch (e) {
+                console.error(e)
+
         setTeams([]);
       } finally {
         setLoading(false);

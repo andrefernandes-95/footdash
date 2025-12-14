@@ -22,9 +22,11 @@ export function useCanControlTeam(teamSlug: string | null | undefined) {
         const { data } = await ApiRequests.meTeam(teamSlug)
         setTeam(data.team);
 
-        if (!data.team) {
+        /*if (!data.team) {
             router.push('/')
-        }
+        }*/
+
+            console.log(data)
       } catch {
         setTeam(null);
       } finally {

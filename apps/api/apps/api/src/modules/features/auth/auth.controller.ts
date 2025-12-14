@@ -23,7 +23,6 @@ export class AuthController {
   ) {
     const sessionId = await this.authService.login(body.email, body.password);
 
-
     const domain = `.${getDomain()}`
 
     // ✅ Sliding expiration: refresh cookie and backend session
@@ -32,7 +31,6 @@ export class AuthController {
       maxAge: 3600 * 1000, // 1 hour
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      domain,
       path: '/', // ensure cookie is sent to all paths
     });
 
@@ -78,7 +76,6 @@ export class AuthController {
     description: 'Team access info',
   })
   async meTeam(@Req() req: Request, @Param('teamSlug') teamSlug: string) {
-    console.log('miauuuuu')
 
     const sessionId = req.cookies?.['SESSIONID'];
     if (!sessionId) return { team: null, membership: null, canAccessBackoffice: false };

@@ -19,8 +19,10 @@ export class SessionGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
     const res = context.switchToHttp().getResponse<Response>();
-
+    console.log('req.cookies:', JSON.stringify(req.cookies))
     const sessionId = req.cookies?.['SESSIONID'];
+        console.log('sessionId', sessionId)
+
     if (!sessionId) {
       return false; // no session, not authenticated
     }
@@ -32,15 +34,12 @@ export class SessionGuard implements CanActivate {
       return false; // invalid session
     }
 
-    const domain = `.${getDomain()}`
-
     // ✅ Sliding expiration: refresh cookie and backend session
     res.cookie('SESSIONID', sessionId, {
       httpOnly: true,
       maxAge: 3600 * 1000, // 1 hour
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      domain,
     });
 
     await this.sessionService.refreshSessionTTL(sessionId); // reset TTL in Redis

@@ -1,7 +1,7 @@
 // teams/teams.controller.ts
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CurrentUser } from 'apps/api/src/modules/features/auth/current-user.decorator';
+import { CurrentUserId } from 'apps/api/src/modules/features/auth/current-user.decorator';
 import { SessionGuard } from 'apps/api/src/modules/features/auth/session.guard';
 import { CreateTeamDto } from 'apps/api/src/modules/features/teams/team.dto';
 import { Team } from 'apps/api/src/modules/features/teams/team.entity';
@@ -28,7 +28,7 @@ export class TeamController {
       ],
     },
   })
-  async getMyTeams(@CurrentUser() userId: number): Promise<Team[]> {
+  async getMyTeams(@CurrentUserId() userId: number): Promise<Team[]> {
     return this.teamsService.getTeamsCreatedByUser(userId);
   }
   @Get(':slug')
@@ -65,7 +65,7 @@ export class TeamController {
     },
   })
   async create(
-    @CurrentUser() userId: number,
+    @CurrentUserId() userId: number,
     @Body() body: CreateTeamDto
   ): Promise<{ userId: number; teamId: number; teamSlug: string }> {
     const { team } = await this.teamsService.createTeam(userId, body);

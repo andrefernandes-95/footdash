@@ -12,6 +12,7 @@ export default function TeamHome() {
 
   const { team, loading } = useGetTeamBySlug(teamSlug)
 
+  
   if (loading) {
     return <></>
   }

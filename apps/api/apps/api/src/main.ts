@@ -13,7 +13,6 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const clientUri = getClientUri(); // e.g., "localhost:3000" or "myapp.com"
-      console.log('clientUri', clientUri)
       
       // allow same origin
       if (!origin || origin === clientUri) {
@@ -23,10 +22,8 @@ async function bootstrap() {
       // allow subdomains
       const regex = new RegExp(`^https?:\/\/[a-z0-9-]+\\.${clientUri.replace(/https?:\/\//, '')}$`);
       if (regex.test(origin)) {
-        console.log('miau')
         return callback(null, true);
       }
-        console.log('false')
 
       // disallow others
       callback(new Error(`CORS not allowed for ${origin}`));

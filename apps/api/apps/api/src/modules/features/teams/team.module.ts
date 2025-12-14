@@ -9,8 +9,8 @@ import { AuthModule } from 'apps/api/src/modules/features/auth/auth.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Team, TeamMember]),
     AuthModule,
+    TypeOrmModule.forFeature([User, Team, TeamMember]),
   ],
   providers: [TeamsService],
   controllers: [TeamController],
