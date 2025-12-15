@@ -1,7 +1,13 @@
-import { Subscription } from "apps/api/src/modules/features/subscriptions/subscription.entity";
-import { TeamMember } from "apps/api/src/modules/features/teams/team-member.entity";
-import { UserProfile } from "apps/api/src/modules/features/users/user-profile.entity";
-import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Subscription } from 'apps/api/src/modules/features/subscriptions/subscription.entity';
+import { UserProfile } from 'apps/api/src/modules/features/users/user-profile.entity';
+import { UserRole } from 'apps/api/src/modules/features/users/user.enum';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -26,13 +32,16 @@ export class User {
   @Column({ type: 'timestamptz', name: 'created_at', default: () => 'NOW()' })
   createdAt: Date;
 
-  @OneToMany(() => TeamMember, (member) => member.user)
-  teamMembers: TeamMember[];
-
   @OneToMany(() => Subscription, (subscription) => subscription.user)
   subscriptions: Subscription[];
 
   @OneToOne(() => UserProfile, (profile) => profile.user, { cascade: true })
   profile: UserProfile;
 
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.FAN,
+  })
+  role: UserRole;
 }

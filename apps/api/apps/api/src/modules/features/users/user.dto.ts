@@ -1,6 +1,7 @@
 // apps/api/src/modules/user/dto/create-user.dto.ts
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from 'apps/api/src/modules/features/users/user.enum';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -26,4 +27,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsString()
   password: string;
+
+  @ApiProperty({
+    description: 'Role of the user',
+    example: 'FAN',
+    enum: UserRole,
+    default: UserRole.FAN,
+  })
+  @IsEnum(UserRole)
+  role: UserRole;
 }

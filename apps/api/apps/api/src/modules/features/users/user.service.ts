@@ -13,11 +13,10 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly emailVerificationService: EmailVerificationService,
     private readonly dataSource: DataSource, // inject DataSource for transactions
-  ) { }
+  ) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<User> {
     return this.dataSource.transaction(async (transactionManager) => {
-
       const { email, username, password } = createUserDto;
 
       // Check if user already exists
@@ -25,7 +24,9 @@ export class UserService {
         where: [{ email }, { username }],
       });
       if (existingUser) {
-        throw new ConflictException('User with this email or username already exists');
+        throw new ConflictException(
+          'User with this email or username already exists',
+        );
       }
 
       // Hash password
@@ -41,15 +42,21 @@ export class UserService {
       await transactionManager.save(User, user);
 
       // Create email verification token
-     const emailVerification = await this.emailVerificationService.generateToken(user, transactionManager);
+      const emailVerification =
+        await this.emailVerificationService.generateToken(
+          user,
+          transactionManager,
+        );
 
       // Send email (can fail, but won't rollback user creation)
-      await this.emailVerificationService.enqueueEmailVerification(user.email, emailVerification.token)
-      
-      return user;
-    })
-  }
+      await this.emailVerificationService.enqueueEmailVerification(
+        user.email,
+        emailVerification.token,
+      );
 
+      return user;
+    });
+  }
 
   async validateLogin(email: string, password: string): Promise<User | null> {
     const user = await this.userRepository.findOne({ where: { email } });
@@ -59,6 +66,13 @@ export class UserService {
     if (!isMatch) return null;
 
     return user;
+  }
+
+  async updateLastLoginAt(user: User): Promise<void> {
+    await this.userRepository.save({
+      ...user,
+      lastLoginAt: new Date(),
+    });
   }
 
   async getUserById(userId: number) {
