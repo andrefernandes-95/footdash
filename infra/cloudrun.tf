@@ -1,15 +1,23 @@
+locals {
+  db_private_ip = one([
+    for ip in google_sql_database_instance.postgres.ip_address :
+    ip.ip_address if ip.type == "PRIVATE"
+  ])
+}
+
 resource "google_cloud_run_service" "api" {
   name     = "footdash-api"
   location = var.project_region
 
   template {
+
     spec {
       containers {
         image = "gcr.io/${var.project_id}/footdash-api:latest"
         ports { container_port = 3000 }
         env {
           name  = "DB_HOST"
-          value = google_sql_database_instance.postgres.private_ip
+          value = local.db_private_ip
         }
         env {
           name  = "DB_PORT"
@@ -29,7 +37,7 @@ resource "google_cloud_run_service" "api" {
         }
         env {
           name  = "DATABASE_URL"
-          value = "postgresql://${var.db_user}:${var.db_password}@${google_sql_database_instance.postgres.private_ip}:${var.db_port}/${var.db_name}"
+          value = "postgresql://${var.db_user}:${var.db_password}@${local.db_private_ip}:${var.db_port}/${var.db_name}"
         }
         env {
           name  = "REDIS_URL"

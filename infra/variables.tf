@@ -9,11 +9,6 @@ variable "project_region" {
   default     = "europe-north1"
 }
 
-variable "db_host" {
-  description = "Postgres RDS hostname"
-  type        = string
-}
-
 variable "db_name" {
   description = "Database Name"
   type        = string
@@ -40,12 +35,12 @@ variable "migrations_path" {
 
 variable "db_port" {
   description = "Postgres database port"
-  type        = "number"
+  type        = number
   default     = 5432
 }
 
 variable "redis_port" {
   description = "Reddis port"
-  type        = "number"
+  type        = number
   default     = 6379
 }
