@@ -1,28 +1,26 @@
-resource "aws_ecs_task_definition" "flyway_task" {
-  family = "flyway-task"
-  requires_compatibilities = ["FARGATE"]
-  network_mode = "awsvpc"
-  cpu = "256"
-  memory = "512"
-
-  container_definitions = jsondecode([{
-    name = "flyway"
-    image = "flyway/flyway:9"
-    command = [
-        "-url=jdbc:postgresql://${var.db_host}:${var.db_port}/${var.db_name}",
-        "-user=${var.db_user}",
-        "-password=${var.db_password}",
-        "-locations=filesystem:/migrations",
-        "migrate"
-    ]
-    mountPoints = [{
-        sourceVolume = "migrations",
-        containerPath = "/migrations"
-    }]
-  }])
-
-  volume {
-    name = "migrations"
-    host_path = var.migrations_path
+resource "google_cloud_run_job" "flyway" {
+  name     = "flyway-job"
+  location = var.project_region
+  template {   # Execution Template (Job Level)
+    template { # Task Template (Container Level)
+      containers {
+        image = "flyway/flyway:9"
+        args = [
+          "-url=jdbc:postgresql://${google_sql_database_instance.postgres.private_ip}:${var.db_name}",
+          "-user=${var.db_user}",
+          "-password=${var.db_password}",
+          "-locations=filesystem:/migrations",
+          "migrate"
+        ]
+        volume_mounts {
+          name       = "migrations"
+          mount_path = "/migrations"
+        }
+      }
+      volumes {
+        name               = "migrations"
+        cloud_sql_instance = google_sql_database_instance.postgres.name
+      }
+    }
   }
 }
