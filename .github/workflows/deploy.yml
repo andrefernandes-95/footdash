@@ -47,8 +47,8 @@ jobs:
       - name: Build & Push Web Client Docker
         run: |
           docker build \
-            -f apps/web-client/Dockerfile \
-            --build-arg API_URL=${{ secrets.API_URL }} \
+            -f Dockerfile.web \
+            --build-arg NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} \
             -t $WEB_IMAGE:latest .
           docker push $WEB_IMAGE:latest
 
