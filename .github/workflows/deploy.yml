@@ -44,11 +44,12 @@ jobs:
       - name: Configure Docker for GCP
         run: gcloud auth configure-docker ${REGION}-docker.pkg.dev
 
-      # 5. Build & Push Web Client Docker
       - name: Build & Push Web Client Docker
-        working-directory: apps/web-client
         run: |
-          docker build -t $WEB_IMAGE:latest -f Dockerfile .
+          docker build \
+            -f apps/web-client/Dockerfile \
+            --build-arg API_URL=${{ secrets.API_URL }} \
+            -t $WEB_IMAGE:latest .
           docker push $WEB_IMAGE:latest
 
       # 6. Build & Push API Docker

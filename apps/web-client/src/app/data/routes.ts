@@ -2,8 +2,7 @@ import { AppConfig } from '@/app/data/config';
 
 console.log(AppConfig);
 export const TeamRoutes = {
-  TEAM_DASHBOARD: (slug: string): string =>
-    `http${AppConfig.BASE_DOMAIN?.startsWith('localhost') ? '' : 's'}://${slug}.${AppConfig.BASE_DOMAIN}/dashboard`,
+  TEAM_DASHBOARD: (slug: string): string => '',
 };
 
 export const AppRoutes = {
