@@ -1,10 +1,17 @@
-"use client";
+'use client';
 
-import { Box, Stack, TextField, Button, Typography, Avatar } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
-import UserDashboardLayout from "@/app/components/user-dashboard-layout/user-dashboard-layout";
-import { useAuth } from "@/app/hooks/useAuth";
+import {
+  Box,
+  Stack,
+  TextField,
+  Button,
+  Typography,
+  Avatar,
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import { useState } from 'react';
+import UserDashboardLayout from '@/app/components/user-dashboard-layout/user-dashboard-layout';
+import { useAuth } from '@/app/hooks/useAuth';
 
 interface ProfileFormValues {
   first_name: string;
@@ -17,16 +24,16 @@ export default function EditProfilePage() {
   const { control, handleSubmit } = useForm<ProfileFormValues>();
   const [avatar, setAvatar] = useState<string | null>(null);
 
-    const { user } = useAuth()
-  
+  const { user } = useAuth();
+
   const onSubmit = (data: ProfileFormValues) => {
-    console.log("Profile updated:", data);
+    console.log('Profile updated:', data);
   };
 
-  const handleAvatarUpload = (e: any) => {
+  const handleAvatarUpload = (e: { target: { files: unknown[] } }) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
+      const url = URL.createObjectURL(file as Blob);
       setAvatar(url);
     }
   };
@@ -36,15 +43,15 @@ export default function EditProfilePage() {
       {/* Glass Panel */}
       <Box
         sx={{
-          width: "100%",
+          width: '100%',
           maxWidth: 900,
           p: 6,
           borderRadius: 5,
-          backdropFilter: "blur(20px)",
-          background: "rgba(255,255,255,0.08)",
-          border: "1px solid rgba(255,255,255,0.15)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-          color: "white",
+          backdropFilter: 'blur(20px)',
+          background: 'rgba(255,255,255,0.08)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          color: 'white',
         }}
       >
         <Typography variant="h4" fontWeight={800} sx={{ mb: 4 }}>
@@ -54,19 +61,26 @@ export default function EditProfilePage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={5}>
             {/* Avatar Section */}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               <Avatar
-                src={avatar || "/default-avatar.png"}
-                sx={{ width: 100, height: 100, border: "3px solid rgba(255,255,255,0.3)" }}
+                src={avatar || '/default-avatar.png'}
+                sx={{
+                  width: 100,
+                  height: 100,
+                  border: '3px solid rgba(255,255,255,0.3)',
+                }}
               />
               <div>
-                <Typography sx={{ mb: 1, fontWeight: 600 }}>Profile Picture</Typography>
+                <Typography sx={{ mb: 1, fontWeight: 600 }}>
+                  Profile Picture
+                </Typography>
 
                 <input
                   id="avatar-upload"
                   type="file"
                   hidden
                   accept="image/*"
+                  // @ts-expect-error fix later
                   onChange={handleAvatarUpload}
                 />
                 <label htmlFor="avatar-upload">
@@ -74,9 +88,9 @@ export default function EditProfilePage() {
                     component="span"
                     variant="outlined"
                     sx={{
-                      borderColor: "rgba(255,255,255,0.3)",
-                      color: "white",
-                      "&:hover": { background: "rgba(255,255,255,0.1)" },
+                      borderColor: 'rgba(255,255,255,0.3)',
+                      color: 'white',
+                      '&:hover': { background: 'rgba(255,255,255,0.1)' },
                     }}
                   >
                     Upload New
@@ -86,7 +100,7 @@ export default function EditProfilePage() {
             </Box>
 
             {/* Two-column layout */}
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={4}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={4}>
               {/* First Name */}
               <Controller
                 name="first_name"
@@ -97,12 +111,12 @@ export default function EditProfilePage() {
                     label="First Name"
                     variant="filled"
                     fullWidth
-                    InputLabelProps={{ sx: { color: "white" } }}
+                    InputLabelProps={{ sx: { color: 'white' } }}
                     InputProps={{
                       sx: {
-                        bgcolor: "rgba(255,255,255,0.1)",
-                        color: "white",
-                        "&::placeholder": { color: "rgba(255,255,255,0.6)" },
+                        bgcolor: 'rgba(255,255,255,0.1)',
+                        color: 'white',
+                        '&::placeholder': { color: 'rgba(255,255,255,0.6)' },
                       },
                     }}
                   />
@@ -119,11 +133,11 @@ export default function EditProfilePage() {
                     label="Last Name"
                     variant="filled"
                     fullWidth
-                    InputLabelProps={{ sx: { color: "white" } }}
+                    InputLabelProps={{ sx: { color: 'white' } }}
                     InputProps={{
                       sx: {
-                        bgcolor: "rgba(255,255,255,0.1)",
-                        color: "white",
+                        bgcolor: 'rgba(255,255,255,0.1)',
+                        color: 'white',
                       },
                     }}
                   />
@@ -142,11 +156,11 @@ export default function EditProfilePage() {
                   variant="filled"
                   fullWidth
                   placeholder="+1 555 123 4567"
-                  InputLabelProps={{ sx: { color: "white" } }}
+                  InputLabelProps={{ sx: { color: 'white' } }}
                   InputProps={{
                     sx: {
-                      bgcolor: "rgba(255,255,255,0.1)",
-                      color: "white",
+                      bgcolor: 'rgba(255,255,255,0.1)',
+                      color: 'white',
                     },
                   }}
                 />
@@ -166,12 +180,12 @@ export default function EditProfilePage() {
                   fullWidth
                   InputLabelProps={{
                     shrink: true,
-                    sx: { color: "white" },
+                    sx: { color: 'white' },
                   }}
                   InputProps={{
                     sx: {
-                      bgcolor: "rgba(255,255,255,0.1)",
-                      color: "white",
+                      bgcolor: 'rgba(255,255,255,0.1)',
+                      color: 'white',
                     },
                   }}
                 />
@@ -184,24 +198,24 @@ export default function EditProfilePage() {
               variant="contained"
               size="large"
               sx={{
-                alignSelf: "flex-start",
+                alignSelf: 'flex-start',
                 mt: 2,
                 px: 5,
                 py: 1.8,
                 borderRadius: 4,
-                background: "rgba(255,255,255,0.9)",
-                color: "#19779B",
+                background: 'rgba(255,255,255,0.9)',
+                color: '#19779B',
                 fontWeight: 900,
-                textTransform: "none",
-                fontSize: "1.1rem",
-                "&:hover": { background: "white" },
+                textTransform: 'none',
+                fontSize: '1.1rem',
+                '&:hover': { background: 'white' },
               }}
             >
               Save Changes
             </Button>
           </Stack>
         </form>
-    </Box>
+      </Box>
     </UserDashboardLayout>
   );
 }

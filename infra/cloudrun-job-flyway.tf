@@ -17,17 +17,18 @@ resource "google_cloud_run_v2_job" "flyway" {
         ]
 
         volume_mounts {
-          name       = "migrations"
-          mount_path = "/migrations"
+          name       = "cloudsql"    # MUST match the reserved volume name
+          mount_path = "/migrations" # Can still map inside container as desired
         }
       }
 
       volumes {
-        name = "migrations"
+        name = "cloudsql" # MUST be 'cloudsql'
         cloud_sql_instance {
-          instances = [google_sql_database_instance.postgres.name]
+          instances = ["${var.project_id}:${var.project_region}:${google_sql_database_instance.postgres.name}"]
         }
       }
+
     }
   }
 }

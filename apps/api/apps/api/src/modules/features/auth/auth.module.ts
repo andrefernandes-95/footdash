@@ -5,13 +5,11 @@ import { AuthController } from './auth.controller';
 import { SessionService } from './session.service';
 import { UserModule } from '../users/user.module';
 import { RedisModule } from 'apps/api/src/modules/redis/redis.module';
-import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [RedisModule, UserModule, JwtModule.register({
-  })],
-  providers: [AuthService, SessionService, JwtService],
+  imports: [RedisModule, UserModule],
+  providers: [AuthService, SessionService],
   controllers: [AuthController],
-  exports: [AuthService, SessionService, JwtModule],
+  exports: [AuthService, SessionService],
 })
-export class AuthModule { }
+export class AuthModule {}
