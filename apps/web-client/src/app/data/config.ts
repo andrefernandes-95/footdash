@@ -1,6 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL
-  ? process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '')
-  : undefined;
+  ? process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, '')
+  : 'localhost';
 
 export const AppConfig = {
   API_URL,
