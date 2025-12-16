@@ -10,6 +10,7 @@ env:
   REGION: ${{ secrets.GCP_REGION }}
   WEB_IMAGE: ${{ secrets.GCP_WEB_IMAGE }}
   API_IMAGE: ${{ secrets.GCP_API_IMAGE }}
+  GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 jobs:
   build-and-push:
@@ -28,20 +29,22 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: ${{ env.GCP_SA_KEY }}
 
-      # 4. Configure Docker to push to GCP Artifact Registry / Container Registry
+      # 4. Configure Docker to push to GCP
       - name: Configure Docker for GCP
         run: gcloud auth configure-docker ${REGION}-docker.pkg.dev
 
       # 5. Build & Push Web Client Docker
       - name: Build & Push Web Client Docker
+        working-directory: apps/web-client
         run: |
-          docker build -t $WEB_IMAGE:latest -f apps/web-client/Dockerfile .
+          docker build -t $WEB_IMAGE:latest -f Dockerfile .
           docker push $WEB_IMAGE:latest
 
       # 6. Build & Push API Docker
       - name: Build & Push API Docker
+        working-directory: . # root of Turbo repo
         run: |
           docker build -t $API_IMAGE:latest -f Dockerfile.api .
           docker push $API_IMAGE:latest
