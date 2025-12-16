@@ -24,6 +24,14 @@ jobs:
       # 2. Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+      - name: Confirm secret exists
+        run: |
+          if [ -z "${{ secrets.GCP_SA_KEY }}" ]; then
+            echo "❌ GCP_SA_KEY is NOT set"
+            exit 1
+          else
+            echo "✅ GCP_SA_KEY is set"
+          fi
 
       # 3. Authenticate with GCP
       - name: Authenticate to Google Cloud
