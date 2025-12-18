@@ -59,6 +59,11 @@ resource "google_cloud_run_service" "web" {
   name     = "footdash-web"
   location = var.project_region
 
+  depends_on = [
+    google_cloud_run_v2_service.api,
+    google_cloud_run_service_iam_member.api_public
+  ]
+
   template {
     spec {
       containers {
@@ -85,4 +90,12 @@ resource "google_cloud_run_service_iam_member" "web_public" {
   service  = google_cloud_run_service.web.name
   role     = "roles/run.invoker"
   member   = "allUsers" # <-- makes it public
+}
+
+resource "google_cloud_run_service_iam_member" "api_public" {
+  project  = var.project_id
+  location = var.project_region
+  service  = google_cloud_run_v2_service.api.name
+  role     = "roles/run.invoker"
+  member   = "allUsers" # allow public access
 }

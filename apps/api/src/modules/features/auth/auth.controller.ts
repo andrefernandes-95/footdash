@@ -29,9 +29,6 @@ export class AuthController {
     res.cookie('SESSIONID', sessionId, {
       httpOnly: true,
       maxAge: 3600 * 1000, // 1 hour
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/', // ensure cookie is sent to all paths
     });
 
     return { message: 'Logged in successfully' };
