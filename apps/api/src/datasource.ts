@@ -9,7 +9,7 @@ const dataSource = new DataSource({
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   synchronize: false,
-  migrationsRun: false,
+  migrationsRun: true,
   dropSchema: false,
   logging: true,
   migrations: [__dirname + '/modules/migrations/**/*{.js,.ts}'],
