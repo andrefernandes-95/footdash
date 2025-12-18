@@ -18,3 +18,15 @@ resource "google_project_iam_member" "storage_admin" {
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.ci_cd.email}"
 }
+
+resource "google_service_account" "cloud_run_sql" {
+  account_id   = "cloud-run-sql"
+  display_name = "Cloud Run SQL Access"
+  project      = var.project_id
+}
+
+resource "google_project_iam_member" "cloudsql_client" {
+  project = var.project_id
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.cloud_run_sql.email}"
+}

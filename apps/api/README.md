@@ -24,3 +24,11 @@ Learn more about `NestJs` with following resources:
 - [Official Documentation](https://docs.nestjs.com) - A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
 - [Official NestJS Courses](https://courses.nestjs.com) - Learn everything you need to master NestJS and tackle modern backend applications at any scale.
 - [GitHub Repo](https://github.com/nestjs/nest)
+
+## Migrations
+
+### Generating Migrations
+
+```
+npm run migration:generate --name=CreateUsers
+```

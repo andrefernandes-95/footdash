@@ -27,12 +27,6 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "migrations_path" {
-  description = "Path to Flyway migrations folder"
-  type        = string
-  default     = "./db/migrations"
-}
-
 variable "db_port" {
   description = "Postgres database port"
   type        = number

@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy root package files and turbo config
 COPY package.json package-lock.json turbo.json ./
 
-# Copy workspace packages (if you have a "packages" folder)
+# Copy workspace packages
 COPY packages ./packages
 
 # Copy API app source code
@@ -29,11 +29,18 @@ COPY --from=builder /app/apps/api/dist ./dist
 # Copy node_modules from builder
 COPY --from=builder /app/node_modules ./node_modules
 
-# Set environment for production
+# Copy migrations (if not already compiled into dist)
+COPY --from=builder /app/apps/api/src/migrations ./dist/migrations
+
+# Set environment variables
 ENV NODE_ENV=production
 
 # Expose the API port
 EXPOSE 3000
 
-# Start the API
-CMD ["node", "dist/main.js"]
+# Copy entrypoint script
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
+# Start the API with migrations
+CMD ["./docker-entrypoint.sh"]

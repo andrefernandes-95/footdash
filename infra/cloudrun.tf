@@ -6,7 +6,7 @@ resource "google_cloud_run_service" "api" {
 
     spec {
       containers {
-        image = "gcr.io/google-samples/hello-app:1.0" #"gcr.io/${var.project_id}/footdash-api:latest"
+        image = "${var.project_region}-docker.pkg.dev/${var.project_id}/footdash-api/api:latest"
         ports { container_port = 3000 }
         env {
           name  = "DB_HOST"
@@ -44,4 +44,36 @@ resource "google_cloud_run_service" "api" {
     percent         = 100
     latest_revision = true
   }
+}
+
+resource "google_cloud_run_service" "web" {
+  name     = "footdash-web"
+  location = var.project_region
+
+  template {
+    spec {
+      containers {
+        image = "${var.project_region}-docker.pkg.dev/${var.project_id}/footdash-web/web-client:latest"
+        ports { container_port = 3000 }
+
+        env {
+          name  = "NEXT_PUBLIC_API_URL"
+          value = "https://${google_cloud_run_service.api.status[0].url}"
+        }
+      }
+    }
+  }
+
+  traffic {
+    percent         = 100
+    latest_revision = true
+  }
+}
+
+resource "google_cloud_run_service_iam_member" "web_public" {
+  project  = var.project_id
+  location = var.project_region
+  service  = google_cloud_run_service.web.name
+  role     = "roles/run.invoker"
+  member   = "allUsers" # <-- makes it public
 }

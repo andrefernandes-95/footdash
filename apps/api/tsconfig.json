@@ -3,13 +3,6 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist",
-    "paths": {
-      "@app/db": [
-        "libs/db/src"
-      ],
-      "@app/db/*": [
-        "libs/db/src/*"
-      ]
-    }
+    "paths": {}
   }
 }

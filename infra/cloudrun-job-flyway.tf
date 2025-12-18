@@ -1,34 +1,42 @@
-resource "google_cloud_run_v2_job" "flyway" {
-  provider = google-beta
-  name     = "flyway-job"
-  project  = var.project_id
+resource "google_vpc_access_connector" "cloudrun" {
+  name          = "cloudrun-connector"
+  region        = var.project_region
+  network       = google_compute_network.main.name
+  ip_cidr_range = "10.8.0.0/28"
+}
+
+resource "google_cloud_run_v2_job" "hello" {
+  name     = "hello-job"
   location = var.project_region
 
-  template {   # Job execution template
-    template { # Task template
+  template {
+    template {
+      service_account = google_service_account.cloud_run_sql.email
+      timeout         = "300s"
+
+      vpc_access {
+        connector = google_vpc_access_connector.cloudrun.id
+        egress    = "ALL_TRAFFIC"
+      }
+
       containers {
-        image = "flyway/flyway:9"
-        args = [
-          "-url=jdbc:postgresql://${local.db_private_ip}:${var.db_port}/${var.db_name}",
-          "-user=${var.db_user}",
-          "-password=${var.db_password}",
-          "-locations=filesystem:/migrations",
-          "migrate"
-        ]
+        image = "${var.project_region}-docker.pkg.dev/${var.project_id}/footdash-api/hello:latest"
 
-        volume_mounts {
-          name       = "cloudsql"    # MUST match the reserved volume name
-          mount_path = "/migrations" # Can still map inside container as desired
+        env {
+          name  = "DB_URL"
+          value = "postgresql://${google_sql_database_instance.postgres.private_ip_address}:${var.db_port}/${var.db_name}"
+        }
+
+        env {
+          name  = "DB_USER"
+          value = var.db_user
+        }
+
+        env {
+          name  = "DB_PASSWORD"
+          value = var.db_password
         }
       }
-
-      volumes {
-        name = "cloudsql" # MUST be 'cloudsql'
-        cloud_sql_instance {
-          instances = ["${var.project_id}:${var.project_region}:${google_sql_database_instance.postgres.name}"]
-        }
-      }
-
     }
   }
 }
