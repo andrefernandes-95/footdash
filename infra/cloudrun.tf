@@ -36,6 +36,10 @@ resource "google_cloud_run_service" "api" {
           name  = "REDIS_URL"
           value = "redis://${google_redis_instance.redis.host}:${var.redis_port}"
         }
+        env {
+          name  = "REDIS_HOST"
+          value = google_redis_instance.redis.host
+        }
       }
     }
   }
