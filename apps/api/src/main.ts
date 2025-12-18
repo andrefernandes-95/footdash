@@ -11,26 +11,10 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: (origin, callback) => {
-      const clientUri = getClientUri(); // e.g., "localhost:3000" or "myapp.com"
-
-      // allow same origin
-      if (!origin || origin === clientUri) {
-        return callback(null, true);
-      }
-
-      // allow subdomains
-      const regex = new RegExp(
-        `^https?:\/\/[a-z0-9-]+\\.${clientUri.replace(/https?:\/\//, '')}$`,
-      );
-
-      if (regex.test(origin)) {
-        return callback(null, true);
-      }
-
-      // disallow others
-      callback(new Error(`CORS not allowed for ${origin}`));
-    },
+    origin: [
+      'https://footdash-web-645031318340.europe-north1.run.app',
+      'http://localhost:3000', // for local dev
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
