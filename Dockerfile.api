@@ -9,13 +9,13 @@ COPY package.json package-lock.json turbo.json ./
 # Copy workspace packages
 COPY packages ./packages
 
-# Copy API app source code
-COPY apps/api ./apps/api
+# Copy the entire repo
+COPY . .
 
 # Install dependencies
 RUN npm install
 
-# Build the API using Turbo
+# Build the API using Turbo (filter to the api app)
 RUN npx turbo run build --filter=api...
 
 # Stage 2: Production image
@@ -23,14 +23,14 @@ FROM node:20-alpine AS prod
 
 WORKDIR /app
 
-# Copy built API from builder
+# Copy built API from builder (apps/api/dist)
 COPY --from=builder /app/apps/api/dist ./dist
 
 # Copy node_modules from builder
 COPY --from=builder /app/node_modules ./node_modules
 
-# Copy migrations (if not already compiled into dist)
-COPY --from=builder /app/apps/api/src/migrations ./dist/migrations
+# Copy migrations from the API app (if not already compiled into dist)
+COPY --from=builder /app/apps/api/src/modules/migrations ./dist/modules/migrations
 
 # Set environment variables
 ENV NODE_ENV=production
@@ -38,8 +38,8 @@ ENV NODE_ENV=production
 # Expose the API port
 EXPOSE 3000
 
-# Copy entrypoint script
-COPY docker-entrypoint.sh ./
+# Copy entrypoint script from API app
+COPY apps/api/docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 # Start the API with migrations
