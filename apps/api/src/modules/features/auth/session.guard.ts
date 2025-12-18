@@ -8,6 +8,7 @@ export const sessionIdConfig: CookieOptions = {
   httpOnly: true,
   maxAge: 3600 * 1000, // 1 hour
   sameSite: 'none',
+  secure: true,
 };
 
 @Injectable()
