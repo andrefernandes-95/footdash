@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { ApiTags, ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LoginDto } from 'src/modules/features/auth/auth.dto';
+import { sessionIdConfig } from 'src/modules/features/auth/session.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -26,10 +27,7 @@ export class AuthController {
     const sessionId = await this.authService.login(body.email, body.password);
 
     // ✅ Sliding expiration: refresh cookie and backend session
-    res.cookie('SESSIONID', sessionId, {
-      httpOnly: true,
-      maxAge: 3600 * 1000, // 1 hour
-    });
+    res.cookie('SESSIONID', sessionId, sessionIdConfig);
 
     return { message: 'Logged in successfully' };
   }

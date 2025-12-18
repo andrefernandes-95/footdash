@@ -1,9 +1,14 @@
 // apps/api/src/modules/auth/guards/session.guard.ts
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { getClientUri, getDomain } from 'src/modules/data/config';
 import { AuthService } from 'src/modules/features/auth/auth.service';
 import { SessionService } from 'src/modules/features/auth/session.service';
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
+
+export const sessionIdConfig: CookieOptions = {
+  httpOnly: true,
+  maxAge: 3600 * 1000, // 1 hour
+  sameSite: 'none',
+};
 
 @Injectable()
 export class SessionGuard implements CanActivate {
@@ -29,10 +34,7 @@ export class SessionGuard implements CanActivate {
     }
 
     // ✅ Sliding expiration: refresh cookie and backend session
-    res.cookie('SESSIONID', sessionId, {
-      httpOnly: true,
-      maxAge: 3600 * 1000, // 1 hour
-    });
+    res.cookie('SESSIONID', sessionId, sessionIdConfig);
 
     await this.sessionService.refreshSessionTTL(sessionId); // reset TTL in Redis
 
