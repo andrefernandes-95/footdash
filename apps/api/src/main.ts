@@ -5,16 +5,25 @@ import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { getClientUri } from 'src/modules/data/config';
 
+const allowedOrigins = [
+  'https://footdash-web-645031318340.europe-north1.run.app',
+  'http://localhost:3000', // local dev
+];
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
 
   app.enableCors({
-    origin: [
-      'https://footdash-web-645031318340.europe-north1.run.app',
-      'http://localhost:3000', // for local dev
-    ],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // allow curl/Postman or server-to-server requests
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
